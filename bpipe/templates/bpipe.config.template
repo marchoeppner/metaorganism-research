@@ -1,0 +1,36 @@
+executor="slurm"
+procs=1
+queue="normal"
+
+
+// Specify resources for individual tools
+
+commands {
+
+	bcl2fastq {
+		procs=1
+		queue="normal"
+	}
+	
+	trowel {
+		procs=16
+	}
+
+	trimmomatic {
+		procs=8
+	}
+	
+	blast {
+		procs=8
+	}
+
+	interproscan {
+		procs=4
+	}
+
+	tophat {
+		procs=16
+	}
+
+
+}
