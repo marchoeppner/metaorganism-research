@@ -9,7 +9,7 @@ fastqc = {
 
 	constraints: "Requires one (single-end) or two (paired-end) gzipped fastq files",
 
-	author: "marc.hoeppner@bils.se"
+	author: "mphoeppner@gmail.com"
 	var paired : true
 	var directory : "fastqc"
 

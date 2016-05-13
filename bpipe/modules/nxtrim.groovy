@@ -9,7 +9,6 @@ nxtrim = {
 	var procs : 16		// Number of cores to use
 	var directoy : "nxtrim"	// Allows specifying an output directory
 
-    	if (branch.sample_dir) { sample_dir = true }
     	// requires here
 
 	// Set a different output directory
