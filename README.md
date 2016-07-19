@@ -3,13 +3,9 @@ Production pipelines for the CRC1182
 
 ## List of included pipelines
 
-* Prokaryotic genome assembly using SPADES
-* Eukaryotic genome assembly using DiscovarDenovo
-* Short read processing
-* RNA-seq denovo assembly
-* Metagenome assembly using InteMap
+to be done...
 
-## Software tools
+## Software tools supported
 
 Bpipe: https://github.com/ssadedin/bpipe/
 Spades (3.7.1): http://spades.bioinf.spbau.ru/release3.7.1/
@@ -18,3 +14,7 @@ FastQC (0.11.5): http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc
 Trowel (0.2.0.4): https://sourceforge.net/projects/trowel-ec/
 NxTrim (0.4.0): https://github.com/sequencing/NxTrim
 
+## Standard Operating Procedures (SOP)
+
+Bacteria genome assembly
+De-novo transcriptome assembly
