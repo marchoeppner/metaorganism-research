@@ -17,4 +17,5 @@ NxTrim (0.4.0): https://github.com/sequencing/NxTrim
 ## Standard Operating Procedures (SOP)
 
 Bacteria genome assembly
+
 De-novo transcriptome assembly
