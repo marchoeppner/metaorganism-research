@@ -1,6 +1,8 @@
 This pipelines combines three tools into a simple assembly/annotation pipeline. It comes with
 absolutely no warranty. 
 
+It assumes that each genome corresponds to one pair of fastq files - if that is not the case, you may need to concatenate the files first. 
+
 1) Trimmomatic 
 Removes sequencing adapters from the paired-end fastq files
 Tested with version: 0.36

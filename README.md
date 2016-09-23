@@ -3,7 +3,7 @@ Production pipelines for the CRC1182
 
 ## List of included pipelines
 
-to be done...
+BacterialAssembly - performs adapter trimming (Trimmomatic), scaffold-level assembly (Spades) nd annotation of paired-end genomic reads (Prokka).
 
 ## Software tools supported
 
