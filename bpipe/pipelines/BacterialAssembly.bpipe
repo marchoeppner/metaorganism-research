@@ -1,0 +1,14 @@
+// A simple genome assembly and annotation pipeline for bacteria
+// Assumes that one genome corresponds to one set of PE libraries in Fastq format.
+// If this is not true, concatenate the reads into one file. If you have additional
+// libraries (like MP), then this pipeline is not for your.
+
+about title: "A simple assembly and annotation pipeline for bacteria"
+
+inputs "fastq.gz" : "Expecting compressed fastq file as input (.fastq.gz)"
+
+load 'BacterialAssembly.config'
+
+run {  "%_R*.fastq.gz" * [ trimmomatic.using(sliding_window:false) + spades + prokka ] }
+
+

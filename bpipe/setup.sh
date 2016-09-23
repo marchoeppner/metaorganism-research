@@ -15,13 +15,6 @@ else
     echo "  export BPIPE_LIB=$MODULE_DIR"
 fi
 
-if [[ -n "$BPIPE_EXE" ]]; then
-    echo "Bpipe executable already installed as '$BPIPE_EXE' (good)"
-else
-    echo "Bpipe executable not found in \$PATH, add this to ~/.bash_profile:"
-    echo "  export PATH=\$PATH:$BPIPE_FOLDER/bin"
-fi
-
 if [[ -n "$BPIPE_BIN" ]]; then
 	echo "\$BPIPE_BIN is already set to '$BPIPE_BIN' (good)"
 else

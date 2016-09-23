@@ -1,0 +1,46 @@
+1) GENERAL INFORMATION
+
+Bpipe is a pipeline framework written in Java/Groovy. To run the pipelines contained within
+this code base, you need to install Bpipe, available from:
+
+download.bpipe.org
+
+The pipelines in this code base where tested with bpipe release 0.9.9.2:
+http://download.bpipe.org/download/show/13
+
+In addition, you need to set a few enviornment variables. Use the script setup.sh to 
+get help with that. 
+
+2) PIPELINES
+
+Pipelines are located in the pipelines subfolder. Each pipeline consists of three files:
+
+my_pipeline.bpipe - the actual pipeline logic. This is the file you execute with Bpipe. 
+my_pipeline.config - A config file you need to copy to your current directory and modify. 
+my_pipeline.readme - Some additional information about how to use the pipeline
+
+Pipelines will load pipeline modules from the $BPIPE_LIB environment vairable; this
+hould already be set if you followed the instructions above. 
+
+Finally, to run a pipeline on a compute cluster, you will also need a config file for that. 
+By default, Bpipe will use the file pipelines/bpipe.config - but you can copy this file to 
+your current directory and modify the resource requirements for each pipeline stage if needed. 
+
+3) Example 
+
+Let's assume we would like to assembly 20 bacterial genomes from PE reads (1 pair per genome). 
+For that we can use the pipeline BacterialAssembly.bpipe:
+
+a) Copy the BacterialAssembly.config file to your project directory and fill out the variables. 
+b) If you are not running on RZ cluster, copy the bpipe.config file to your project directory and
+adjust it to match your compute environment. 
+c) Make sure all dependencies are loaded (Prokka requires a lot of things to be in $PATH). 
+d) Do a test run:
+bpipe test /path/to/BacterialAssembly.bpipe *.fastq.gz
+e) If that looks ok, you can run the pipeline:
+bpipe run -n 140 /path/to/BacterialAssembly.bpipe *.fastq.gz
+
+4) More about BPipe
+
+http://docs.bpipe.org/
+
