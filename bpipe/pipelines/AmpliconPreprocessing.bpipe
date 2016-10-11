@@ -1,0 +1,16 @@
+// A short description of the pipeline here
+
+about title: "A descriptive title for the pipeline, needed for bpipe_config tool"
+
+inputs "fastq.gz" : "Expecting compressed fastq files as input"
+
+load 'AmpliconPreprocessing.config'
+
+run { "%_R*.fastq.gz" * [  gunzip + usearch_fastq_mergepairs 
+	+ fastqx_fastq_quality_filter 
+	+ usearch_fastq_filter 
+	+  usearch_uchime_ref.using(gold:true)
+]
+}
+
+
