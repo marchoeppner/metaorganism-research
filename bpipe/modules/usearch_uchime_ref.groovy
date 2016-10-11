@@ -20,15 +20,15 @@ usearch_uchime_ref = {
 	}
 
 	def db = ""
-	def suffix = ""
+	def suffix = "chimera_"
 	if (rdp) {
 		requires RDP_FA : "Must provide location of RDP reference set for chimera detection"
 		db = RDP_FA
-		suffix = "rdp"
+		suffix += "rdp"
 	} else if (gold) {
 		requires GOLD_FA : "Must provide location of GOLD reference set for chimera detection"
 		db = GOLD_FA
-		suffix = "gold"
+		suffix += "gold"
 	} else if (gold && rdp) {
 		fail "Can only choose one reference set to run against (was: gold and rdp)"
 	} else {
@@ -37,9 +37,9 @@ usearch_uchime_ref = {
 	
     	// Running a command
 	
-	filter(suffix) {
+	transform("fasta") to("clean.fasta",suffix +".fasta") {
 		from("fasta") {
-		    	exec "$USEARCH -uchime_ref $input -db $db -strand plus -chimeras $output","usearch_uchime_ref"
+		    	exec "$USEARCH -uchime_ref $input -db $db -strand plus -nonchimeras $output1 -chimeras $output2","usearch_uchime_ref"
 		}
 	}
 
