@@ -30,23 +30,30 @@ my_pipeline.readme - Some additional information about how to use the pipeline
 Pipelines will load pipeline modules from the $BPIPE_LIB environment vairable; this
 should already be set if you followed the instructions above. 
 
-Finally, to run a pipeline on a compute cluster, you will also need a config file for that. 
-By default, Bpipe will use the file pipelines/bpipe.config - but you can copy this file to 
-your current directory and modify the resource requirements for each pipeline stage if needed. 
+Finally, to run a pipeline on a compute cluster, you will also need a config file. By default, a
+pipeline will read the config file of the same name from the pipeline folder. If you need to change
+the config, copy that file to where you plan to run your analysis and make and adjustment needed. 
 
+Likewise, resource requirements are specified in pipelines/bpipe.config. If you need to change 
+the default settings (including use of resource manager), copy the file to you project folder and
+modify it as needed. 
+ 
 3) Example 
 
-Let's assume we would like to assembly 20 bacterial genomes from PE reads (1 pair per genome). 
-For that we can use the pipeline BacterialAssembly.bpipe:
+Let us assume we want to perform a simply preprocessing of amplicon data. The basic workflow will look
+as follows:
 
-a) Copy the BacterialAssembly.config file to your project directory and fill out the variables. 
-b) If you are not running on RZ cluster, copy the bpipe.config file to your project directory and
-adjust it to match your compute environment. 
-c) Make sure all dependencies are loaded (Prokka requires a lot of things to be in $PATH). 
-d) Do a test run:
-bpipe test /path/to/BacterialAssembly.bpipe *.fastq.gz
-e) If that looks ok, you can run the pipeline:
-bpipe run -r -n 140 /path/to/BacterialAssembly.bpipe *.fastq.gz
+Load dependencies, if needed (check the respective readme file)
+
+bpipe test /path/to/code/bpipe/pipelines/AmpliconPreprocessing.bpipe *.fastq.gz
+
+This will verify that everything looks ok. If it does, simply run the pipeline:
+
+bpipe run /path/to/code/bpipe/pipelines/AmpliconPreprocessing.bpipe *.fastq.gz
+
+Once the pipeline finishes, you can have Bpipe delete any intermediate files:
+
+bpipe cleanup *
 
 4) More about BPipe
 
