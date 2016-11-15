@@ -22,3 +22,7 @@ Fastx (0.0.14): https://github.com/agordon/fastx_toolkit/releases/download/0.0.1
 Bacteria genome assembly
 
 De-novo transcriptome assembly
+
+## Data policy
+
+Short guide line regarding the storage and annotation of data and its subsequent access/publication.
