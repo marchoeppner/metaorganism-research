@@ -102,7 +102,7 @@ lines.each do |line|
     
   elements = line.split("\t")
   
-  f = File.new("#{elements[0]}.metadata","w+")
+  f = File.new("#{elements[1]}.metadata","w+")
   
   metas = []
   units.each_with_index do |unit,index|

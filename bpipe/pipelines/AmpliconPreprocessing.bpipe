@@ -9,7 +9,7 @@ load 'AmpliconPreprocessing.config'
 run { "%_R*.fastq.gz" * [   gunzip + usearch_fastq_mergepairs 
 	+ fastqx_fastq_quality_filter 
 	+ usearch_fastq_filter 
-	+  usearch_uchime_ref.using(gold:true)
+	+  usearch_uchime_ref
 ]
 }
 
