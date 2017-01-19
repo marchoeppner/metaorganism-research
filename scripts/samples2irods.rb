@@ -44,6 +44,29 @@ def metadata_to_string(file_name)
   
 end
 
+
+def metadata_to_imeta(file_name)
+
+	answer = []
+
+	IO.readlines(file_name).each do |line|
+
+    		elements = line.strip.split("\t")
+    		if elements.length == 2
+      			elements.push("string")
+    		end
+    		elements.each do |e|
+      			e.gsub!(/\;/, ',')
+    		end
+
+    		answer << elements.collect{|e| "\"#{e}\"" }.join(" ")
+
+  	end
+	
+	return answer
+
+end
+
 def metadata_to_info(file_name)
   
   answer = {}
@@ -63,6 +86,7 @@ end
 options = OpenStruct.new()
 opts = OptionParser.new()
 opts.on("-i","--infile", "=INFILE","Input file") {|argument| options.infile = argument }
+opts.on("-p","--pretend","Simulate only") {|argument| options.pretend = true }
 opts.on("-h","--help","Display the usage information") {
  puts opts
  exit
@@ -70,7 +94,7 @@ opts.on("-h","--help","Display the usage information") {
 
 opts.parse! 
 
-# F13388-L1_S149_L001_R1_001.fastq.gz
+# Example: F13388-L1_S149_L001_R1_001.fastq.gz
 file_groups = Dir.entries(Dir.getwd).select{|e| e.include?(".fastq.gz")}.group_by{|e| e.split("_")[0..2].join("_")}
 
 file_groups.each do |group,files|
@@ -80,18 +104,34 @@ file_groups.each do |group,files|
 
   raise "Could not fin the metadata sheet (#{metadat}) for the sample #{group}" unless File.exists?(metadata)
   
-  
   meta_string = metadata_to_string(metadata)
   info = metadata_to_info(metadata)
-  
+  meta_sets = metadata_to_imeta(metadata)
+
   tar_file = group + ".tar"
   
   unless File.exists?(tar_file)
-    system("tar -cvf #{tar_file} #{group}_R*")
+    this_command = "tar -cvf #{tar_file} #{group}_R*"
+    if options.pretend
+       warn this_command
+    else
+    	system(this_command)
+    end
   end
   
-  command = "iput -D tar -f --metadata \"#{meta_string}\" #{tar_file} /CAUZone/home/sukmb352/crc1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
-  system command
-  puts command
-    
+  #command = "iput -D tar -f --metadata \"#{meta_string}\" #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
+  
+  command = "iput -D tar -f #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
+
+  if options.pretend
+	warn command  
+  else
+  	system command
+  end
+
+  meta_sets.each do |ms|
+  	imeta_cmd = "imeta add -d /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file} #{ms}"
+  	system imeta_cmd unless options.pretend
+  end 
+	    
 end
