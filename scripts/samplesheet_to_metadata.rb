@@ -94,10 +94,12 @@ end
 
 lines = IO.readlines(csv_file_p2)
 
-units = lines.shift.strip.split("\t")
-header = lines.shift.strip.split("\t")
+units = lines.shift.split("\t")
+
+header = lines.shift.split("\t")
 
 lines.each do |line|
+
   next if line.strip.match(/^$/)
     
   elements = line.split("\t")
@@ -105,15 +107,16 @@ lines.each do |line|
   f = File.new("#{elements[2]}.metadata","w+")
   
   metas = []
+
   units.each_with_index do |unit,index|
-    
+
     unit = "" if index == 0
     
     key = header[index]
     value = elements.shift
     this_entry = MetaEntry.new(key,value,unit)
    
-    metas << this_entry
+    metas << this_entry unless unit == ""
     
   end
   
