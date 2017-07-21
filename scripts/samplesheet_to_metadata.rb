@@ -86,6 +86,11 @@ lines.each do |line|
     main_contact_email = line.strip.split("\t")[1]
   elsif line.match(/^Project-ID.*/)
     project_id = line.strip.split("\t")[1]
+    if project_id.include?("/")
+	fixed_id = project_id.split("/")[0]
+	warn "Illegal project ID: #{project_id}. Changing to #{fixed_id}"
+	project_id = fixed_id
+     end
   end
   
 end
@@ -98,13 +103,15 @@ units = lines.shift.split("\t")
 
 header = lines.shift.split("\t")
 
+lims_barcode_column = header.index(header.find{|h| h.include?("LIMS-ID") })
+
 lines.each do |line|
 
   next if line.strip.match(/^$/)
     
   elements = line.split("\t")
   
-  f = File.new("#{elements[2]}.metadata","w+")
+  f = File.new("#{elements[lims_barcode_column]}.metadata","w+")
   
   metas = []
 
@@ -114,6 +121,7 @@ lines.each do |line|
     
     key = header[index]
     value = elements.shift
+
     this_entry = MetaEntry.new(key,value,unit)
    
     metas << this_entry unless unit == ""

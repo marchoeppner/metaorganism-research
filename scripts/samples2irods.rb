@@ -87,6 +87,7 @@ options = OpenStruct.new()
 opts = OptionParser.new()
 opts.on("-i","--infile", "=INFILE","Input file") {|argument| options.infile = argument }
 opts.on("-p","--pretend","Simulate only") {|argument| options.pretend = true }
+opts.on("-c","--cleanup","Cleanup existing file before loading") {|argument| options.cleanup = true }
 opts.on("-h","--help","Display the usage information") {
  puts opts
  exit
@@ -99,11 +100,14 @@ file_groups = Dir.entries(Dir.getwd).select{|e| e.include?(".fastq.gz")}.group_b
 
 file_groups.each do |group,files|
   
-  
+
+  warn "Processing data set #{group}"  
   metadata = group.split("-")[0] + ".metadata"
 
-  raise "Could not fin the metadata sheet (#{metadat}) for the sample #{group}" unless File.exists?(metadata)
+  warn "Could not fin the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
   
+  next unless File.exists?(metadata)
+
   meta_string = metadata_to_string(metadata)
   info = metadata_to_info(metadata)
   meta_sets = metadata_to_imeta(metadata)
@@ -120,7 +124,17 @@ file_groups.each do |group,files|
   end
   
   #command = "iput -D tar -f --metadata \"#{meta_string}\" #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
-  
+
+  command = "irm /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
+
+  if options.cleanup
+	  if options.pretend
+        	warn command
+	  else
+        	system command
+	  end
+  end
+    
   command = "iput -D tar -f #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
 
   if options.pretend
