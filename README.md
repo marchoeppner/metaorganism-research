@@ -1,28 +1,18 @@
-# metaorganism-research
-Production pipelines for the CRC1182
+# SFB1182 | metaorganism-research | INF project
 
-## List of included pipelines
 
-BacterialAssembly - performs adapter trimming (Trimmomatic), scaffold-level assembly (Spades) and annotation of paired-end genomic reads (Prokka).
-AmpliconPrecrocessing - performs basic preprocessing on Amplicon data (merging, filtering, chimera removal)
+## Generic metadata samplesheet
 
-## Software tools supported
+If you need to compile metadata for a sequencing project, please use the file metadata/SFB1182_SampleSheet.xlsx.
 
-Bpipe: https://github.com/ssadedin/bpipe/
-Spades (3.7.1): http://spades.bioinf.spbau.ru/release3.7.1/
-Trimmomatic (0.36): http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.36.zip
-FastQC (0.11.5): http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
-Trowel (0.2.0.4): https://sourceforge.net/projects/trowel-ec/
-NxTrim (0.4.0): https://github.com/sequencing/NxTrim
-Usearch (8.1): http://www.drive5.com/usearch/download.html
-Fastx (0.0.14): https://github.com/agordon/fastx_toolkit/releases/download/0.0.14/fastx_toolkit-0.0.14.tar.bz2
+## Metadata management
 
-## Standard Operating Procedures (SOP)
+Metadata management is defined in the file metadata/metadata_standard.txt
 
-Bacteria genome assembly
-
-De-novo transcriptome assembly
+Booking metadata into iRODS is accomplished with scripts included under scripts/
 
 ## Data policy
 
 Short guide line regarding the storage and annotation of data and its subsequent access/publication.
+
+Instructions are included under data_policy/SFB1182_data_policy.docx
