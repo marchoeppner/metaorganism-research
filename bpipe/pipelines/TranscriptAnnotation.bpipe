@@ -1,9 +1,0 @@
-// A short description of the pipeline here
-
-about title: "Pipeline to generate input data required for functional annotation of transcripts"
-
-inputs "fasta" : "Expecting a Fasta file (.fasta)"
-
-load 'TranscriptAnnotation.config'
-
-Bpipe.run { "%.fasta" * [ fastasplit + [ "%" * [ pipeline_prepare + transdecoder_orfs + [ blast.using(program:"blastp"), hmmscan, signalp ] , blast.using(program:"blastx") ] ] ] }
