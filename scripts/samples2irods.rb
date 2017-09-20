@@ -104,7 +104,7 @@ file_groups.each do |group,files|
   warn "Processing data set #{group}"  
   metadata = group.split("-")[0] + ".metadata"
 
-  warn "Could not fin the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
+  warn "Could not find the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
   
   next unless File.exists?(metadata)
 
@@ -115,7 +115,7 @@ file_groups.each do |group,files|
   tar_file = group + ".tar"
   
   unless File.exists?(tar_file)
-    this_command = "tar -cvf #{tar_file} #{group}_R*"
+    this_command = "tar -cvf #{tar_file} #{group}_R* #{metadata}"
     if options.pretend
        warn this_command
     else
