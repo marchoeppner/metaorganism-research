@@ -1,0 +1,121 @@
+abiotic mesoscopic physical object
+ablation zone
+animal feed
+area of barren land
+area of cropland
+area of deciduous forest
+area of developed open space
+area of developed space with high usage intensity
+area of developed space with low usage intensity
+area of developed space with medium usage intensity
+area of dwarf scrub
+area of emergent herbaceous wetland
+area of evergreen forest
+area of gramanoid or herbaceous vegetation
+area of lichen-dominated vegetation
+area of mixed forest
+area of moss-dominated vegetation
+area of open water
+area of pastureland or hayfields
+area of perennial ice or snow
+area of perennial snow
+area of perennial water ice
+area of scrub
+area of sedge- and forb-dominated herbaceious vegetation
+area of woody wetland
+astronomical body part
+astronomical object
+biosphere
+biotic mesoscopic physical object
+brine channel
+burrow
+cell culture
+circalittoral zone
+cloud condensation nucleus
+cloud droplet
+contaminated animal feed
+continental subsurface zone
+convergent plate boundary
+cryosphere
+determinate root nodule
+disturbed area
+divergent plate boundary
+droplet
+environmental zone
+firn
+fumarole-derived ice tower
+galaxy
+glacial feature
+glaze ice layer
+globular star cluster
+hydrosphere
+ice ablation zone
+ice field
+ice floe
+ice mass
+illuminated biosphere part
+important site
+indeterminate root nodule
+indeterminate root nodule active meristem
+indeterminate root nodule infection zone
+indeterminate root nodule nitrogen fixation zone
+indeterminate root nodule senescent zone
+infralittoral zone
+marine eulittoral zone
+mass of biological material
+mesoscopic physical object
+microplastic particle
+mycetome
+nebula
+nesting material
+neve
+nilas
+nurdle
+oceanic subsurface zone
+old plant
+organ
+organ culture
+organic feature
+outer space
+pancake ice
+pedosphere
+perennial snow patch
+photophore
+photosphere
+piece of plastic
+planetary photic zone
+planetary subsurface zone
+plant feed
+plant tissue culture
+pole
+powdery snow
+primary microplastic particle
+proplyd
+protoplanetary disk
+raindrop
+rift zone
+roadside
+Root
+root nodule
+rural area
+sea ice floe
+seasonal snow patch
+secondary microplastic particle
+slab snow
+snow
+snow drift
+snow mass
+snowpack
+snow patch
+technosphere
+tectonic plate boundary
+tissue culture
+transform plate boundary
+trophosome
+vegetated area
+water-based cloud droplet
+water droplet
+water ice crystal
+water raindrop
+young ice
+young plant
