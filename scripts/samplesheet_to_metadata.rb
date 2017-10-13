@@ -60,6 +60,21 @@ opts.on("-h","--help","Display the usage information") {
 
 opts.parse! 
 
+# Report any keys that were not defined in the reference sheet
+undefined_keys = []
+
+# Check for reference metadata info
+metadata_reference = File.dirname(__FILE__) + "/../metadata/metadata_standard.txt"
+raise "Could not find the reference metadata sheet" unless File.exists?(metadata_reference)
+ref_keys = []
+IO.readlines(metadata_reference).each do |line|
+	next if line.match(/^#.*/)
+	e = line.strip.split("\t")
+	ref_keys << e[1]
+end
+
+ref_keys.compact!
+
 # Verify that the converter is available
 raise "Could not find the Python XLSX to CSV converter" unless command?("xlsx2csv")
 
@@ -110,7 +125,7 @@ lines.each do |line|
   next if line.strip.match(/^$/)
     
   elements = line.split("\t")
-  
+
   f = File.new("#{elements[lims_barcode_column]}.metadata","w+")
   
   metas = []
@@ -136,6 +151,9 @@ lines.each do |line|
     
     if meta.key and meta.value and meta.unit
       next if meta.value.length == 0
+
+      undefined_keys << meta.key  unless ref_keys.include?(meta.key)
+
       f.puts "#{meta.key}\t#{meta.value}\t#{meta.unit}"
     end
 
@@ -145,4 +163,11 @@ lines.each do |line|
   
 end
 
+unless undefined_keys.empty?
+	undefined_keys.uniq!
 
+	warn "#{undefined_keys.length} undefined keys encountered"
+	undefined_keys.each do |k|
+		puts k
+	end
+end
