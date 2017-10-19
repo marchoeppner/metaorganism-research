@@ -96,13 +96,13 @@ opts.on("-h","--help","Display the usage information") {
 opts.parse! 
 
 # Example: F13388-L1_S149_L001_R1_001.fastq.gz
-file_groups = Dir.entries(Dir.getwd).select{|e| e.include?(".fastq.gz")}.group_by{|e| e.split("_")[0..2].join("_")}
+file_groups = Dir.entries(Dir.getwd).select{|e| e.include?(".fastq.gz")}.group_by{|e| e.split("_R")[0] }
 
 file_groups.each do |group,files|
   
-
   warn "Processing data set #{group}"  
-  metadata = group.split("-")[0] + ".metadata"
+  library_id = group.split("-")[0]
+  metadata = group + ".metadata"
 
   warn "Could not find the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
   
@@ -115,7 +115,7 @@ file_groups.each do |group,files|
   tar_file = group + ".tar"
   
   unless File.exists?(tar_file)
-    this_command = "tar -cvf #{tar_file} #{group}_R* #{metadata}"
+    this_command = "tar -cvf #{tar_file} #{group}* #{metadata}"
     if options.pretend
        warn this_command
     else
@@ -125,7 +125,7 @@ file_groups.each do |group,files|
   
   #command = "iput -D tar -f --metadata \"#{meta_string}\" #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
 
-  command = "irm /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
+  command = "irm -f /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
 
   if options.cleanup
 	  if options.pretend

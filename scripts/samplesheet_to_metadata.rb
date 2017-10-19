@@ -49,6 +49,25 @@ class MetaEntry
   
 end
 
+# Only WGS84 coordinates allowed, need to re-format
+def loc2wgs(value)
+
+	value.gsub!(/\"/, '')
+
+	new_value = ""
+	if value.match(/^[0-9]*\,[0-9]*/)
+		new_value = value.gsub(/\,/, '.')
+	elsif value.match(/^[0-9]*\°.*/)
+		# Coordinates are negative for lat south and long east
+		new_value += "-" if value.match(/.*\S$/) or value.match(/.*W$/)
+		new_value = value.gsub(/\"/, '').gsub(/\./, '').gsub(/\°/, '.').gsub(/\'/, '').gsub(/[N,E,S,W]$/, '')
+	else
+		new_value = value
+	end
+
+	return new_value
+end
+
 ### Get the script arguments and open relevant files
 options = OpenStruct.new()
 opts = OptionParser.new()
@@ -120,13 +139,18 @@ header = lines.shift.split("\t")
 
 lims_barcode_column = header.index(header.find{|h| h.include?("LIMS-ID") })
 
+library_id = nil
+
 lines.each do |line|
 
   next if line.strip.match(/^$/)
     
   elements = line.split("\t")
 
-  f = File.new("#{elements[lims_barcode_column]}.metadata","w+")
+  library_id = elements[lims_barcode_column]
+  abort "Library ID could not be parsed" if library_id.nil?
+
+  f = File.new("#{library_id}.metadata","w+")
   
   metas = []
 
@@ -146,15 +170,18 @@ lines.each do |line|
   f.puts "CRC_PROJECT_ID\t#{project_id}\tstring"
   f.puts "MAIN_CONTACT_NAME\t#{main_contact_name}\tstring"
   f.puts "MAIN_CONTACT_EMAIL\t#{main_contact_email}\tstring"
+  f.puts "LIBRARY_ID\t#{library_id}\tstring"
   
   metas.each do |meta|
-    
+
     if meta.key and meta.value and meta.unit
       next if meta.value.length == 0
 
       undefined_keys << meta.key  unless ref_keys.include?(meta.key)
-
-      f.puts "#{meta.key}\t#{meta.value}\t#{meta.unit}"
+	
+      meta.key.include?("GEOGRAPHIC_LOCATION") ? val = loc2wgs(meta.value) : val = meta.value
+	
+      f.puts "#{meta.key}\t#{val}\t#{meta.unit}"
     end
 
   end
