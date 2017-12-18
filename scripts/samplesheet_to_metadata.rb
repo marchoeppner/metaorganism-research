@@ -137,7 +137,7 @@ units = lines.shift.split("\t")
 
 header = lines.shift.split("\t")
 
-lims_barcode_column = header.index(header.find{|h| h.include?("LIMS-ID") })
+lims_barcode_column = header.index(header.find{|h| h.include?("LIMS_ID") })
 
 library_id = nil
 
@@ -166,7 +166,9 @@ lines.each do |line|
     metas << this_entry unless unit == ""
     
   end
-  
+
+  [ project_id , main_contcat_name, main_contcat_email, library_id ].each { |v| abort "Missing mandatory value detected, check sample sheet" if  v.length == 0 }
+
   f.puts "CRC_PROJECT_ID\t#{project_id}\tstring"
   f.puts "MAIN_CONTACT_NAME\t#{main_contact_name}\tstring"
   f.puts "MAIN_CONTACT_EMAIL\t#{main_contact_email}\tstring"
