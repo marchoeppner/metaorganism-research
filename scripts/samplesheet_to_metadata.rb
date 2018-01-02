@@ -167,7 +167,7 @@ lines.each do |line|
     
   end
 
-  [ project_id , main_contcat_name, main_contcat_email, library_id ].each { |v| abort "Missing mandatory value detected, check sample sheet" if  v.length == 0 }
+  [ project_id , main_contact_name, main_contact_email, library_id ].each { |v| abort "Missing mandatory value detected, check sample sheet" if  v.length == 0 }
 
   f.puts "CRC_PROJECT_ID\t#{project_id}\tstring"
   f.puts "MAIN_CONTACT_NAME\t#{main_contact_name}\tstring"
