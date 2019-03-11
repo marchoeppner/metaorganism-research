@@ -102,9 +102,9 @@ raise "Could not find the Python XLSX to CSV converter" unless command?("xlsx2cs
 # Sheet 1 provides information about the submitter
 csv_file_p1 = options.infile.gsub(/\.xlsx/, '.p1.tab')
 system("xlsx2csv #{options.infile} -s 1 -d tab > #{csv_file_p1}")
-# Sheet 2 includes the sample information
-csv_file_p2 = options.infile.gsub(/\.xlsx/, '.p2.tab')
-system("xlsx2csv #{options.infile} -s 2 -d tab > #{csv_file_p2}")
+# Sheet 3 includes the sample information
+csv_file_p3 = options.infile.gsub(/\.xlsx/, '.p3.tab')
+system("xlsx2csv #{options.infile} -s 3 -d tab > #{csv_file_p3}")
 
 ### Get project information from first sheet
 
@@ -131,13 +131,13 @@ end
 
 #### Parse CSV and create meta data files from second sheet
 
-lines = IO.readlines(csv_file_p2)
+lines = IO.readlines(csv_file_p3)
 
 units = lines.shift.split("\t")
 
 header = lines.shift.split("\t")
 
-lims_barcode_column = header.index(header.find{|h| h.include?("LIMS_ID") })
+lims_barcode_column = header.index(header.find{|h| h.include?("LIMS-ID") })
 
 library_id = nil
 
@@ -166,6 +166,8 @@ lines.each do |line|
     metas << this_entry unless unit == ""
     
   end
+
+  next if library_id.length == 0
 
   [ project_id , main_contact_name, main_contact_email, library_id ].each { |v| abort "Missing mandatory value detected, check sample sheet" if  v.length == 0 }
 

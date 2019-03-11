@@ -1,5 +1,10 @@
-# SFB1182 | metaorganism-research | INF project
+![CRC Logo](/images/logo-en_black.png)
 
+# CRC11182 | metaorganism-research | INF project
+
+The CRC1182 is a DFG funded collaborative research effort to better understand the molecular basis for the interaction between host organisms and their assoicated microbiome. 
+
+The INF project within the CRC provides data management workflows and bioinformatic support. This repository contains relevant information, scripts and documents for the data management work. For bioinformatic workflows, please see the nf-core project https://nf-co.re .
 
 ## Generic metadata samplesheet
 

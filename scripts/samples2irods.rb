@@ -101,7 +101,7 @@ file_groups = Dir.entries(Dir.getwd).select{|e| e.include?(".fastq.gz")}.group_b
 file_groups.each do |group,files|
   
   warn "Processing data set #{group}"  
-  library_id = group.split("_")[0]
+  library_id = group.split("-")[0]
   metadata = library_id + ".metadata"
 
   warn "Could not find the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
