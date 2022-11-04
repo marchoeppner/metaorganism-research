@@ -85,6 +85,7 @@ undefined_keys = []
 # Check for reference metadata info
 metadata_reference = File.dirname(__FILE__) + "/../metadata/metadata_standard.txt"
 raise "Could not find the reference metadata sheet" unless File.exists?(metadata_reference)
+
 ref_keys = []
 IO.readlines(metadata_reference).each do |line|
 	next if line.match(/^#.*/)
@@ -99,27 +100,32 @@ raise "Could not find the Python XLSX to CSV converter" unless command?("xlsx2cs
 
 ### Convert XLSX to CSV
 
-# Sheet 1 provides information about the submitter
-csv_file_p1 = options.infile.gsub(/\.xlsx/, '.p1.tab')
-system("xlsx2csv #{options.infile} -s 1 -d tab > #{csv_file_p1}")
-# Sheet 3 includes the sample information
-csv_file_p3 = options.infile.gsub(/\.xlsx/, '.p3.tab')
-system("xlsx2csv #{options.infile} -s 3 -d tab > #{csv_file_p3}")
+system("rm metadata-*")
+system("xlsx2csv -A -s ';' -o metadata -i #{options.infile}")
+
+frontpage = "metadata-Submitter_Information.csv"
+exit "Frontpage missing from XLS sheet" unless File.exist?(frontpage)
+meta = Dir["metadata-*MetaData*"][0]
+exit "Metadata information missing from XLS sheet" unless File.exist?(meta)
 
 ### Get project information from first sheet
 
 project_id = nil
 main_contact_name = nil
 main_contact_email = nil
+principle_investigator = nil
 
-lines = IO.readlines(csv_file_p1)
+lines = IO.readlines(frontpage).collect{|l| l.gsub(/\"/, "") }
+
 lines.each do |line|
   if line.match(/^Main Contact Name.*/)
-    main_contact_name = line.strip.split("\t")[1]
-  elsif line.match(/^Main Contact Email/)
-    main_contact_email = line.strip.split("\t")[1]
+    main_contact_name = line.strip.split(";")[1]
+  elsif line.match(/^Main Contact Email.*/)
+    main_contact_email = line.strip.split(";")[1]
+  elsif line.match(/^Principle Investigator.*/)
+    principle_investigator = line.strip.split(";")[1]
   elsif line.match(/^Project-ID.*/)
-    project_id = line.strip.split("\t")[1]
+    project_id = line.strip.split(";")[1]
     if project_id.include?("/") || project_id.include?("and")
 	project_id.include?("/") ? fixed_id = project_id.split("/")[0] : fixed_id = project_id.split(" ")[0]
 	warn "Illegal project ID: #{project_id}. Changing to #{fixed_id}"
@@ -131,11 +137,11 @@ end
 
 #### Parse CSV and create meta data files from second sheet
 
-lines = IO.readlines(csv_file_p3)
+lines = IO.readlines(meta).collect{|l| l.gsub(/\"/, "") }
 
-units = lines.shift.split("\t")
+units = lines.shift.split(";")
 
-header = lines.shift.split("\t")
+header = lines.shift.split(";")
 
 lims_barcode_column = header.index(header.find{|h| h.include?("LIMS-ID") })
 
@@ -149,12 +155,16 @@ library_id = nil
 
 lines.each do |line|
 
+  line.strip!
+
   next if line.strip.match(/^$/)
     
-  elements = line.split("\t")
+  elements = line.gsub(/\/"/, "").split(";")
 
   library_id = elements[lims_barcode_column]
   abort "Library ID could not be parsed" if library_id.nil?
+
+  library_id.include?("-S1") ? library_id = library_id.split("-S1")[0] : library_id = library_id
 
   f = File.new("#{library_id}.metadata","w+")
   
@@ -175,9 +185,10 @@ lines.each do |line|
 
   next if library_id.length == 0
 
-  [ project_id , main_contact_name, main_contact_email, library_id ].each { |v| abort "Missing mandatory value detected (#{v}), check sample sheet" if  v.length == 0 }
+  [ project_id , main_contact_name, main_contact_email, principle_investigator, library_id ].each { |v| abort "Missing mandatory value detected, check sample sheet" if  v.length == 0 }
 
   f.puts "CRC_PROJECT_ID\t#{project_id}\tstring"
+  f.puts "PRINCIPLE_INVESTIGATOR\t#{principle_investigator}\tstring"
   f.puts "MAIN_CONTACT_NAME\t#{main_contact_name}\tstring"
   f.puts "MAIN_CONTACT_EMAIL\t#{main_contact_email}\tstring"
   f.puts "LIBRARY_ID\t#{library_id}\tstring"

@@ -82,6 +82,21 @@ def metadata_to_info(file_name)
   
 end
 
+def extract_library_id(read_name)
+
+	# 21Nov52-DL197_S197_L001
+	# 21Nov52-DL070_S70_L001_R2_001.fastq.gz
+	if read_name.match(/^[0-9]+[A-Za-z]+[0-9]+-[A-Z]+[0-9]+_S.*/)
+		return read_name.split("_S")[0]
+	# J39655-L1_S77_L001_R1_001.fastq.gz
+	elsif read_name.match(/^[A-Z0-9]+-L[0-9]_S.*/)
+		return read_name.split("-")[0]
+	else
+		abort "Did not find a regexp that fits these reads (#{read_name})"
+	end
+
+end
+
 ### Get the script arguments and open relevant files
 options = OpenStruct.new()
 opts = OptionParser.new()
@@ -95,16 +110,19 @@ opts.on("-h","--help","Display the usage information") {
 
 opts.parse! 
 
+BASE_URL = "/sfb1182/home"
+
 # Example: F13388-L1_S149_L001_R1_001.fastq.gz
 file_groups = Dir.entries(Dir.getwd).select{|e| e.include?(".fastq.gz")}.group_by{|e| e.split("_R")[0] }
 
 file_groups.each do |group,files|
   
   warn "Processing data set #{group}"  
-  library_id = group.split("-")[0]
+  library_id = extract_library_id(group) 
+  warn library_id
   metadata = library_id + ".metadata"
 
-  warn "Could not find the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
+  abort "Could not find the metadata sheet (#{metadata}) for the sample #{group}" unless File.exists?(metadata)
   
   next unless File.exists?(metadata)
 
@@ -125,7 +143,7 @@ file_groups.each do |group,files|
   
   #command = "iput -D tar -f --metadata \"#{meta_string}\" #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
 
-  command = "irm -f /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
+  command = "irm -f #{BASE_URL}/research-#{info['CRC_PROJECT_ID'].downcase}/raw_data/#{tar_file}"
 
   if options.cleanup
 	  if options.pretend
@@ -135,7 +153,7 @@ file_groups.each do |group,files|
 	  end
   end
     
-  command = "iput -D tar -f #{tar_file} /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file}"
+  command = "iput -D tar -f #{tar_file} #{BASE_URL}/research-#{info['CRC_PROJECT_ID'].downcase}/raw_data/#{tar_file}"
 
   if options.pretend
 	warn command  
@@ -144,7 +162,7 @@ file_groups.each do |group,files|
   end
 
   meta_sets.each do |ms|
-  	imeta_cmd = "imeta add -d /CAUZone/sfb1182/#{info['CRC_PROJECT_ID']}/raw_data/#{tar_file} #{ms}"
+  	imeta_cmd = "imeta add -d #{BASE_URL}/research-#{info['CRC_PROJECT_ID'].downcase}/raw_data/#{tar_file} #{ms}"
   	system imeta_cmd unless options.pretend
   end 
 	    
