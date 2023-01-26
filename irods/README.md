@@ -35,18 +35,19 @@ that iRODS is setup for your cluster account.
 
 Check if you have an iRODS folder in your home directory:
 
-ls $HOME/.irods
+```ls $HOME/.irods```
 
 If yes, great. If not, create it.
 
-mkdir $HOME/.irods
+```mkdir $HOME/.irods```
 
 The iRODS client fetches information about your user credentials and the “zone” you are using. At the CAU there is only one zone (CAUzone), so that keeps things simple. 
 
-nano $HOME/.irods/irods_environment.json
+```nano $HOME/.irods/irods_environment.json```
 
 The iRODS configuration file must have to following format (add your RZCluster username where indicated):
 
+```
 {
     "irods_host": "irods-icat.rz.uni-kiel.de",
     "irods_zone_name": "CAUZone",
@@ -62,10 +63,11 @@ The iRODS configuration file must have to following format (add your RZCluster u
     "irods_encryption_algorithm": "AES-256-CBC",
     "irods_ssl_verify_server": "none"
 }
- 
+```
+
 Once the file is updated/created, you can initialize iRODS:
 
-iinit
+```iinit```
 
 And that should do the trick. You are now in your cluster home directory as well as in your iRODS home directory. Let’s discuss this some more…
 
@@ -75,21 +77,26 @@ If you are familiar with a typical Unix file system, you already know that ‘ls
 things, ‘ils’ and ‘icd’. These commands do exactly what their well-known i-free siblings do, but in a file system that lives side-by-side with that default file system. This creates a situation where you can be in your Unix $HOME directory, but in 
 some totally different location of your iRODS file system. 
 
+```
 pwd
 /home/suxxx111
-
+```
+```
 ipwd
 /CAUZone/home/suxxx111
-
+```
+```
 icd data
-
 ipwd
 /CAUZone/home/sux1111/data
+```
 
 But still, when you do a normal pwd:
 
+```
 pwd
 /home/suxxx111
+```
 
 So basically, you will have to keep track of two locations at the same time. Since you won’t be using iRODS all that much, this shouldn’t be problem. 
 
@@ -100,10 +107,13 @@ file system for analytical purposes. This statement is essential true, but not r
 
 First of all, the CRC iRODS folder obviously does not live in your home folder, but directly under the CAU zone:
 
+```
 icd /CAUZone/sfb1182
+```
 
 You can now list the CRC projects:
 
+```
 ils
 /CAUZone/sfb1182:
   C- /CAUZone/sfb1182/A1
@@ -116,17 +126,19 @@ ils
   C- /CAUZone/sfb1182/C2
   C- /CAUZone/sfb1182/C3
 
+```
+
 (the C at the beginning of each line indicates this object to be a collection, which is iRODS speak for “folder”, more or less).
 
 ### iget - Getting data from iRODS
 
 Say you want to get raw data out of the B2 project in iRODS to perform some analysis on the cluster, you can use the iget command to copy it out of iRODS and onto the Unix file system:
 
-iget /CAUZone/sfb1182/B2/raw_data/some_file.tar .
+```iget /CAUZone/sfb1182/B2/raw_data/some_file.tar .```
 
 This would copy some_file.tar directly to the current Unix directory. Alternatively, you can copy it to some other folder you are not currently in (the same applies to the iRODS locator, by the way).
 
-iget /CAUZone/sfb1182/B2/raw_data/some_file.tar /home/sukmb352/some_other_folder/
+```iget /CAUZone/sfb1182/B2/raw_data/some_file.tar /home/sukmb352/some_other_folder/```
 
 Why not icp, you ask? Well, ‘icp’ works of course like our old friend ‘cp’, but unfortunately only within iRODS.
 
@@ -134,7 +146,7 @@ Why not icp, you ask? Well, ‘icp’ works of course like our old friend ‘cp�
 
 Data can be copied into iRODS using the iput command. 
 
-iput –Dtar some_file.tar /CAUZone/sfb1182/B2/raw_data/
+```iput –Dtar some_file.tar /CAUZone/sfb1182/B2/raw_data/```
 
 Here the “D” flag tells iRODS that the object is of the data type “tar”, which is special to iRODS. You can also omit this flag if the object is not a “tar” archive. But ideally it will be, unless we are talking about actual single files. Bundling a 
 collection of files into a tar archive makes iRODS transactions a lot faster and can be used in conjunction with the ibun command, which we will discuss next. 
@@ -144,17 +156,21 @@ collection of files into a tar archive makes iRODS transactions a lot faster and
 The value of bundling files into tar archive lies in the performance gains when checking data into or out of iRODS. However, once in iRODS, it would be nice to “de-bundle” the files again – or conversely, to bundle a list of files in iRODS for 
 faster transfer to the local file system. This is where ibun can help.
 
+```
 tar -chlf mydir.tar -C /x/y/z/mydir .
 iput -Dtar mydir.tar .
 ibun -x mydir.tar mydir
+```
 
 In this example, we first bundle an entire folder into one tar archive. Next, the tar archive is copied into iRODS using iput and then, once in iRODS, extracted into the original folder again. 
 
 The same thing works in reverse:
 
+```
 ibun -cDtar mydir.tar mydir
 iget mydir.tar
 tar –xvf mydir.tar
+```
 
 Note that full paths to the various files have been omitted in our examples -  we are basically assuming that we are both in the iRODS folder where the folder lives that we wish to tar as well as in the Unix directory where that folder should be 
 copied to. Otherwise you can of course add full path names to these commands and run them from wherever. 
