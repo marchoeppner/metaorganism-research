@@ -6,18 +6,14 @@ The CRC1182 is a DFG funded collaborative research effort to better understand t
 
 The INF project within the CRC provides data management workflows and bioinformatic support. This repository contains relevant information, scripts and documents for the data management work. For bioinformatic workflows, please see the nf-core project https://nf-co.re .
 
-## Generic metadata samplesheet
+# Contents
 
-If you need to compile metadata for a sequencing project, please use the file metadata/SFB1182_SampleSheet.xlsx.
+[Metadata model](metadata/README.md)
 
-## Metadata management
+[Data policy](data_policy/README.md)
 
-Metadata management is defined in the file metadata/metadata_standard.txt
+[Utilities](scripts/README.md)
 
-Booking metadata into iRODS is accomplished with scripts included under scripts/
+[iRODS instructions](irods/README.md)
 
-## Data policy
 
-Short guide line regarding the storage and annotation of data and its subsequent access/publication.
-
-Instructions are included under data_policy/SFB1182_data_policy.docx
