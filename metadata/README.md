@@ -8,7 +8,7 @@
 
 ## Release 2.0
 
-[v2.0 NGS raw data[(2.0/ngs.md)
+[v2.0 NGS raw data](2.0/ngs.md)
 
 ## Supplemenmtary materials
 
