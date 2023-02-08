@@ -4,4 +4,4 @@
 
 The files included herin correspond to the state of the ENVO ontology used for the metadata model and field validation. 
 
-
+[ENVO basic in OBO format](envo-basic.obo)
