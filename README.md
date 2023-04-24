@@ -1,5 +1,9 @@
 ![CRC Logo](/images/logo-en_black.png)
 
+Attention! This repository has moved to: [https://github.com/ikmb/crc1182](https://github.com/ikmb/crc1182)
+
+Information below is likely out-of-date. 
+
 # CRC11182 | metaorganism-research | INF project
 
 The CRC1182 is a DFG funded collaborative research effort to better understand the molecular basis for the interaction between host organisms and their associated microbiome. For more information, please see: https://www.metaorganism-research.com/
